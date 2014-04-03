@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>deveelrl</id>
+        <version>1.0.0</version>
+        <title>Deveel ReadLine</title>
+        <authors>Antonello Provenzano</authors>
+        <owners>Deveel</owners>
+        <licenseUrl>http://http://www.opensource.org/licenses/bsd-license.php</licenseUrl>
+        <projectUrl>http://github.com/deveel/deveelrl</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Deveel ReadLine is a simple library to provide some of the functionalities of GNU Readline within .NET and Mono applications</description>
+        <copyright>Copyright 2009-2012 Deveel</copyright>
+        <tags>readline console .NET Mono</tags>
+    </metadata>
+    <files>
+        <file src="..\dist\deveelrl.dll" target="lib\net20\deveelrl.dll" />
+    </files>
+</package>

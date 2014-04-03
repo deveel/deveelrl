@@ -6,16 +6,14 @@ using System.Text;
 namespace Deveel {
 	public static class Readline {
 		static Readline() {
-			controlZIsEOF = (Path.DirectorySeparatorChar == '\\');
+			ControlDIsEOF = true;
+			ControlZIsEOF = (Path.DirectorySeparatorChar == '\\');
 			controlCInterrupts = (Path.DirectorySeparatorChar == '/');
 			Console.TreatControlCAsInput = !controlCInterrupts;
 		}
 
 		#region Fields
 		// Internal state.
-		private static bool enterIsDuplicate;
-		private static bool controlDIsEOF = true;
-		private static bool controlZIsEOF;
 		private static bool controlCInterrupts;
 
 		// Line input buffer.
@@ -48,14 +46,12 @@ namespace Deveel {
 		#endregion
 
 		#region Properties
+
 		/// <summary>
 		/// Gets or sets a flag that indicates if pressing the "Enter" key on 
 		/// an empty line causes the most recent history line to be duplicated.
 		/// </summary>
-		public static bool EnterIsDuplicate {
-			get { return enterIsDuplicate; }
-			set { enterIsDuplicate = value; }
-		}
+		public static bool EnterIsDuplicate { get; set; }
 
 		/// <summary>
 		/// Gets or sets a flag that indicates if CTRL-D is an EOF indication
@@ -64,10 +60,7 @@ namespace Deveel {
 		/// <remarks>
 		/// The default is true (i.e. EOF).
 		/// </remarks>
-		public static bool ControlDIsEOF {
-			get { return controlDIsEOF; }
-			set { controlDIsEOF = value; }
-		}
+		public static bool ControlDIsEOF { get; set; }
 
 		/// <summary>
 		/// Gets or sets a flag that indicates if CTRL-Z is an EOF indication.
@@ -75,11 +68,8 @@ namespace Deveel {
 		/// <remarks>
 		/// The default is true on Windows system, false otherwise.
 		/// </remarks>
-		public static bool ControlZIsEOF {
-			get { return controlZIsEOF; }
-			set { controlZIsEOF = value; }
-		}
-		
+		public static bool ControlZIsEOF { get; set; }
+
 		/// <summary>
 		/// Gets or sets a flag that indicates if CTRL-C is an EOF indication.
 		/// </summary>
@@ -679,7 +669,7 @@ namespace Deveel {
 
 						case '\u0004': {
 								// CTRL-D: EOF or delete the current character.
-								if (controlDIsEOF) {
+								if (ControlDIsEOF) {
 									lastWord.Length = 0;
 									// Signal an EOF if the buffer is empty.
 									if (length == 0) {
@@ -797,7 +787,7 @@ namespace Deveel {
 
 						case '\u001A': {
 								// CTRL-Z: Windows end of file indication.
-								if (controlZIsEOF && length == 0) {
+								if (ControlZIsEOF && length == 0) {
 									EndLine();
 									return null;
 								}
@@ -928,7 +918,7 @@ namespace Deveel {
 				}
 			}
 			while (state != State.Done);
-			if (length == 0 && enterIsDuplicate) {
+			if (length == 0 && EnterIsDuplicate) {
 				if (History.Count > 0) {
 					return History.GetHistory(0);
 				}
